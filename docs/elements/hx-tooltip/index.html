@@ -48,6 +48,14 @@ also:
 {% block attributes %}
   <dl class="memberList">
     <!-- HXTooltipElement -->
+    <dt>delay</dt>
+    <dd>
+      <p>
+        Milliseconds to delay showing/hiding the tooltip after a user-initiated event.
+      </p>
+    </dd>
+
+    <!-- HXTooltipElement -->
     <dt>for</dt>
     <dd>
       <p>
@@ -94,6 +102,18 @@ also:
 
 {% block properties %}
   <dl class="memberList">
+    <!-- HXTooltipElement -->
+    <dt>delay {Integer [500]}</dt>
+    <dd>
+      <p>
+        Milliseconds to delay showing/hiding the tooltip after a user-initiated event.
+      </p>
+      <p class="hxSubdued hxSubBody">
+        <hx-icon type="info-circle"></hx-icon>
+        Reflects the <code>delay</code> attribute.
+      </p>
+    </dd>
+
     <!-- Positionable Mixin -->
     <dt>
       controlElement {HTMLElement}

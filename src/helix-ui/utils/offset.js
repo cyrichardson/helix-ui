@@ -1,5 +1,5 @@
 /**
- * @module HelixUI/Utils/Position/Offset
+ * @module HelixUI/Utils/Offset
  * @description
  * Utilities to calculate coordinates of an offset element
  * in relation to a relative element.
@@ -30,7 +30,7 @@
  */
 
 /**
- * @typedef {Object} Delta
+ * @typedef {Object} OffsetDelta
  * @description
  * Calculated metadata
  *
@@ -57,7 +57,7 @@
  * @param {DOMRect} off - bounding rectangle for the target element
  * @param {DOMRect} ref - bounding rectangle for the reference element
  * @param {OffsetOptions} [opts={}] - offset configuration
- * @returns {Delta}
+ * @returns {OffsetDelta}
  */
 function _getDeltas (off, ref, opts = {}) {
     // height delta
@@ -444,29 +444,37 @@ export function getLeftTop (off, ref, opts) {
  * @enum {Function}
  * @name offsetFunctionMap
  */
-export const offsetFunctionMap = {
-    'top-left': getTopLeft,
-    'top-start': getTopStart,
-    'top': getTop,
-    'top-end': getTopEnd,
-    'top-right': getTopRight,
-    'right-top': getRightTop,
-    'right-start': getRightStart,
-    'right': getRight,
-    'right-end': getRightEnd,
-    'right-bottom': getRightBottom,
-    'bottom-right': getBottomRight,
+const fnMap = {
+    'bottom-center': getBottom,
     'bottom-end': getBottomEnd,
-    'bottom': getBottom,
-    'bottom-start': getBottomStart,
     'bottom-left': getBottomLeft,
+    'bottom-right': getBottomRight,
+    'bottom-start': getBottomStart,
+    'center-middle': getCenter,
     'left-bottom': getLeftBottom,
     'left-end': getLeftEnd,
-    'left': getLeft,
+    'left-middle': getLeft,
     'left-start': getLeftStart,
     'left-top': getLeftTop,
-    'center': getCenter,
+    'right-bottom': getRightBottom,
+    'right-end': getRightEnd,
+    'right-middle': getRight,
+    'right-start': getRightStart,
+    'right-top': getRightTop,
+    'top-center': getTop,
+    'top-end': getTopEnd,
+    'top-left': getTopLeft,
+    'top-right': getTopRight,
+    'top-start': getTopStart,
 };
+// position aliases
+fnMap['left'] = fnMap['left-middle'];
+fnMap['top'] = fnMap['top-center'];
+fnMap['right'] = fnMap['right-middle'];
+fnMap['bottom'] = fnMap['bottom-center'];
+fnMap['center'] = fnMap['center-middle'];
+
+export const offsetFunctionMap = fnMap;
 
 export default {
     getBottom,

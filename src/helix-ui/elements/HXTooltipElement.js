@@ -5,8 +5,6 @@ import shadowStyles from './HXTooltipElement.less';
 import { Positionable } from '../mixins/Positionable';
 import { KEYS, mix, generateId } from '../utils';
 
-const TOOLTIP_DELAY = 500;
-
 class _ProtoClass extends mix(HXElement, Positionable) {}
 
 /**
@@ -32,6 +30,7 @@ export class HXTooltipElement extends _ProtoClass {
 
         // overrides Positionable default
         this.DEFAULT_POSITION = 'top';
+        this.POSITION_OFFSET = 20;
 
         this._onCtrlBlur = this._onCtrlBlur.bind(this);
         this._onCtrlFocus = this._onCtrlFocus.bind(this);
@@ -49,10 +48,9 @@ export class HXTooltipElement extends _ProtoClass {
 
         // TODO: What if 'id' is blank?
         this.$defaultAttribute('id', `tip-${generateId()}`);
-
         this.$defaultAttribute('role', 'tooltip');
-        this.$defaultAttribute('data-offset', 20);
 
+        this.addEventListener('reposition', this._onReposition);
         this._connectToControl();
     }
 
@@ -60,6 +58,7 @@ export class HXTooltipElement extends _ProtoClass {
     $onDisconnect () {
         super.$onDisconnect();
 
+        this.removeEventListener('reposition', this._onReposition);
         this._detachListeners();
     }
 
@@ -78,7 +77,7 @@ export class HXTooltipElement extends _ProtoClass {
                 break;
 
             case 'position':
-                this._elRoot.setAttribute('position', newVal);
+                this._setShadowPosition(newVal);
                 break;
         }
     }
@@ -95,6 +94,16 @@ export class HXTooltipElement extends _ProtoClass {
         if (this.isConnected) {
             return this.getRootNode().querySelector(`#${this.htmlFor}`);
         }
+    }
+
+    /**
+     * @type {Integer}
+     */
+    set delay (value) {
+        this.setAttribute('delay', value);
+    }
+    get delay () {
+        return Number(this.getAttribute('delay') || 500);
     }
 
     /**
@@ -195,7 +204,7 @@ export class HXTooltipElement extends _ProtoClass {
             // schedule HIDE
             this._hideTimeout = setTimeout(() => {
                 this.open = false;
-            }, TOOLTIP_DELAY);
+            }, this.delay);
         }
     }
 
@@ -286,6 +295,16 @@ export class HXTooltipElement extends _ProtoClass {
         }
     }
 
+    /** @private */
+    _onReposition () {
+        this._setShadowPosition(this.optimumPosition);
+    }
+
+    /** @private */
+    _setShadowPosition (position) {
+        this._elRoot.setAttribute('position', position);
+    }
+
     /**
      * Show Tooltip after delay
      *
@@ -302,7 +321,7 @@ export class HXTooltipElement extends _ProtoClass {
             // schedule SHOW
             this._showTimeout = setTimeout(() => {
                 this.open = true;
-            }, TOOLTIP_DELAY);
+            }, this.delay);
         }
     }
 }
